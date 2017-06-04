@@ -1,53 +1,112 @@
-#**Finding Lane Lines on the Road** 
-[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
+# **Finding Lane Lines on the Road** 
 
-<img src="examples/laneLines_thirdPass.jpg" width="480" alt="Combined Image" />
+Final video 1 [solidWhiteRight](https://youtu.be/A0AtQF_pikw)
 
-Overview
+Final video 2 [solidYellowLeft](https://youtu.be/gQJpdq8N0XY)
+
+### The pipeline
+
 ---
 
-When we drive, we use our eyes to decide where to go.  The lines on the road that show us where the lanes are act as our constant reference for where to steer the vehicle.  Naturally, one of the first things we would like to do in developing a self-driving car is to automatically detect lane lines using an algorithm.
+**In this project, I used the provided helper function and tuned them to work on the provided images and then on the videos.<br />**
 
-In this project you will detect lane lines in images using Python and OpenCV.  OpenCV means "Open-Source Computer Vision", which is a package that has many useful tools for analyzing images.  
+The function run_pipeline() has calls to all the helper functions. The components of the pipeline are applied in the following succession:
+* <b>Grayscale:</b><br />
+The image is first converted to grayscale. It works fine on these images/videos but I'm not sure if this is the best strategy for images with shade on the line such as [this image](http://imgur.com/a/xZ23d) in the challenge video.<br/>
+Since we know what color of lines to expect (white/yellow etc.), we can apply a more informed color selection technique?<br /><br />
+* <b>Gaussian Blur:</b><br />
+I chose a kernel of size 15.<br /><br />
+* <b>Canny Edge Detector:</b><br />
+Used parameters low_threshold=0 and high_threshold=100.<br /><br />
+* <b>Region of Interest:</b><br />
+I selected a 4-sided polygon as my region of interest (see pictures below)<br /><br />
+* <b>Hough Transform:</b><br />
+I used min_line_len = 5 and max_line_gap = 25<br /><br />
+* <b>Extrapolate line segments to two lines (left and right lane):</b><br />
+#Elaborate on this<br /><br />
+* <b>Draw the detected lines on the original image:</b><br />
+This step does a weighted merge of the image with lines with the original image<br /><br />
 
-To complete the project, two files will be submitted: a file containing project code and a file containing a brief write up explaining your solution. We have included template files to be used both for the [code](https://github.com/udacity/CarND-LaneLines-P1/blob/master/P1.ipynb) and the [writeup](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md).The code file is called P1.ipynb and the writeup template is writeup_template.md 
+**The following are the images from each step in the pipeline:**<br />
 
-To meet specifications in the project, take a look at the requirements in the [project rubric](https://review.udacity.com/#!/rubrics/322/view)
+* <b>Grayscale:</b><br />
+<figure>
+<img src="http://i.imgur.com/5lEBgF0.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/hdsSMtO.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/q4E8uD3.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/mAVZ6LL.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/rKZSVSo.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/YsbPdmX.jpg" width="380" alt="Grayscale Image" />
+</figure><br /><br />
+* <b>Gaussian Blur:</b><br />
+<figure>
+<img src="http://i.imgur.com/CD6YDQD.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/7NYzUa4.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/Gmlbj0Z.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/gCWTVme.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/TRAWkp2.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/6XsCygx.jpg" width="380" alt="Grayscale Image" />
+</figure>
+* <b>Canny Edge Detector:</b><br />
+<figure>
+<img src="http://i.imgur.com/p0gk6Or.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/pQW6DMC.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/xbDjo5t.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/2OU2kC4.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/HBq9GOf.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/ctqH8CU.jpg" width="380" alt="Grayscale Image" />
+</figure>
+* <b>Region of Interest:</b><br />
+<figure>
+<img src="http://i.imgur.com/gBB6hT3.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/YGTHS5s.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/3isaaSN.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/7vpbaqz.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/aPmOwFa.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/Hvjcj0w.jpg" width="380" alt="Grayscale Image" />
+</figure>
+* <b>Hough Transform:</b><br />
+<figure>
+<img src="http://i.imgur.com/CWZQqQY.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/wnwbbps.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/EIUeB7w.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/DvSlvwP.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/PmIXJat.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/EBBBcQs.jpg" width="380" alt="Grayscale Image" />
+</figure>
+* <b>Extrapolate line segments to two lines (left and right lane):</b><br />
+<figure>
+<img src="http://i.imgur.com/eYtgApe.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/Z9xnOh7.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/8fubLwy.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/E5Dqw1O.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/5KMYjB4.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/z3emEMt.jpg" width="380" alt="Grayscale Image" />
+</figure>
+* <b>Draw the detected lines on the original image:</b><br />
+<figure>
+<img src="http://i.imgur.com/B7HAOGr.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/2mpQzZ3.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/cIE5m4f.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/YK2lD5H.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/XiVvwxe.jpg" width="380" alt="Grayscale Image" />
+<img src="http://i.imgur.com/kC3MtPn.jpg" width="380" alt="Grayscale Image" />
+</figure>
 
-
-Creating a Great Writeup
 ---
-For this project, a great writeup should provide a detailed response to the "Reflection" section of the [project rubric](https://review.udacity.com/#!/rubrics/322/view). There are three parts to the reflection:
 
-1. Describe the pipeline
+### Potential shortcomings with your current pipeline
 
-2. Identify any shortcomings
+* If the lane lines are curved, fitting a curve of degree 1 can fail and this pipeline won't work.
 
-3. Suggest possible improvements
+* If all or part of the lane lines are not within the region of interest I've chosen, the pipeline won't see the lane lines.
 
-We encourage using images in your writeup to demonstrate how your pipeline works.  
+### Possible improvements to your pipeline
 
-All that said, please be concise!  We're not looking for you to write a book here: just a brief description.
+* Moving to a higher order polynomial to fit the lines would help scale to more kinds of lane lines.
+* Converting to GrayScale may be prone to errors since we lose out on important information about where the lanes are by distinguising them with their color (e.g. yellow). I would like to use the color characteristics of lane lines to filter them out before applying Canny and Hough filters.
+* Hardcoding region of interest sounds like a bad idea. I would like to work on choosing it dynamically based on the current frame's composition.
 
-You're not required to use markdown for your writeup.  If you use another method please just submit a pdf of your writeup. Here is a link to a [writeup template file](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md). 
+### Future work
 
-
-The Project
----
-
-## If you have already installed the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) you should be good to go!   If not, you should install the starter kit to get started on this project. ##
-
-**Step 1:** Set up the [CarND Term1 Starter Kit](https://classroom.udacity.com/nanodegrees/nd013/parts/fbf77062-5703-404e-b60c-95b78b2f3f9e/modules/83ec35ee-1e02-48a5-bdb7-d244bd47c2dc/lessons/8c82408b-a217-4d09-b81d-1bda4c6380ef/concepts/4f1870e0-3849-43e4-b670-12e6f2d4b7a7) if you haven't already.
-
-**Step 2:** Open the code in a Jupyter Notebook
-
-You will complete the project code in a Jupyter notebook.  If you are unfamiliar with Jupyter Notebooks, check out <A HREF="https://www.packtpub.com/books/content/basics-jupyter-notebook-and-python" target="_blank">Cyrille Rossant's Basics of Jupyter Notebook and Python</A> to get started.
-
-Jupyter is an Ipython notebook where you can run blocks of code and see results interactively.  All the code for this project is contained in a Jupyter notebook. To start Jupyter in your browser, use terminal to navigate to your project directory and then run the following command at the terminal prompt (be sure you've activated your Python 3 carnd-term1 environment as described in the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) installation instructions!):
-
-`> jupyter notebook`
-
-A browser window will appear showing the contents of the current directory.  Click on the file called "P1.ipynb".  Another browser window will appear displaying the notebook.  Follow the instructions in the notebook to complete the project.  
-
-**Step 3:** Complete the project and submit both the Ipython notebook and the project writeup
-
+* I would like to see how the pipeline performs with an IR camera for when the car is driving at night and also how it can be made more robust to frames in which the camera is positioned against sunlight.
