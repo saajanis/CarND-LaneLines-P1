@@ -99,13 +99,13 @@ This step does a weighted merge of the image with lines from the previous step w
 
 ---
 
-### Potential shortcomings with your current pipeline
+### Potential shortcomings with the current pipeline
 
 * If the lane lines are curved, fitting a curve of degree 1 can fail and this pipeline won't work.
 
 * If all or part of the lane lines are not within the region of interest I've chosen, the pipeline won't see the lane lines.
 
-### Possible improvements to your pipeline
+### Possible improvements to the pipeline
 
 * Moving to a higher order polynomial to fit the lines would help scale to more kinds of lane lines.
 * Converting to GrayScale may be prone to errors since we lose out on important information about where the lanes are by distinguising them with their color (e.g. yellow). I would like to use the color characteristics of lane lines to filter them out before applying Canny and Hough filters.
