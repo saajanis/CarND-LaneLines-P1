@@ -23,9 +23,13 @@ I selected a 4-sided polygon as my region of interest (see pictures below)<br />
 * <b>Hough Transform:</b><br />
 I used min_line_len = 5 and max_line_gap = 25<br /><br />
 * <b>Extrapolate line segments to two lines (left and right lane):</b><br />
-#Elaborate on this<br /><br />
+    * I first divide the line segments into left and right lane line segments by checking their 'x' coordinate value to see if they fall in the left or right half of the frame.
+    * For segments in each category, I use the np.polyfit() function to detect their average slope and intercept.
+    * Since I know the y-coordinates of the region of interest for each half of the frame, I use that value in conjunction with the slope and intercept detected in the previous step to detect their corresponding x values.
+    * Finally, for each section, I have the bounding x, y coordinates of the lane lines which I draw on the image.
+<br /><br />
 * <b>Draw the detected lines on the original image:</b><br />
-This step does a weighted merge of the image with lines with the original image<br /><br />
+This step does a weighted merge of the image with lines from the previous step with the original image<br /><br />
 
 **The following are the images from each step in the pipeline:**<br />
 
